@@ -1,24 +1,24 @@
 # SmartBott
 
-This project utilizes an Arduino board with Bluetooth Low Energy (BLE) capabilities and a VL53L0X sensor to create a smart bottle counter. The code provided in `main.ino` implements the functionality of the smart bottle counter.
+This project utilizes a Seeed Studio XIAO board based on the nRF52840 chipset, along with a VL53L0X sensor, to create a smart bottle counter. The code provided in `main.ino` implements the functionality of the smart bottle counter.
 
 ## Prerequisites
 
 To run this code, you will need the following components:
 
-- Arduino board (with BLE support)
+- Seeed Studio XIAO board (based on the nRF52840 chipset)
 - VL53L0X sensor
 - ArduinoBLE library
 - VL53L0X library
 
-Make sure the required libraries are installed before uploading the code to your Arduino board.
+Make sure the required libraries are installed before uploading the code to your Seeed Studio XIAO board.
 
 ## Setup
 
-1. Connect the VL53L0X sensor to the Arduino board according to the pin configuration in the code.
-2. Connect the Arduino board to your computer via USB.
+1. Connect the VL53L0X sensor to the Seeed Studio XIAO board according to the pin configuration in the code.
+2. Connect the Seeed Studio XIAO board to your computer via USB.
 3. Open the `main.ino` file in the Arduino IDE or your preferred code editor.
-4. Upload the code to the Arduino board.
+4. Upload the code to the Seeed Studio XIAO board.
 
 ## Functionality
 
@@ -51,11 +51,11 @@ You can adjust these values based on your sensor's calibration and the desired l
 
 If you encounter any issues while running the smart bottle counter, consider the following:
 
-- Make sure the Arduino board is properly connected to the computer and the sensor is correctly wired.
+- Make sure the Seeed Studio XIAO board is properly connected to the computer and the sensor is correctly wired.
 - Verify that the required libraries (`ArduinoBLE` and `VL53L0X`) are installed.
 - Double-check the pin configurations in the code to ensure they match your hardware setup.
 
-If the problem persists, consult the documentation for the Arduino board, sensor, and libraries for further assistance.
+If the problem persists, consult the documentation for the Seeed Studio XIAO board, sensor, and libraries for further assistance.
 
 ## License
 
@@ -65,3 +65,4 @@ This project is licensed under the [MIT License](LICENSE). Feel free to modify a
 
 - This project utilizes the [ArduinoBLE](https://www.arduino.cc/en/Reference/ArduinoBLE) library for Bluetooth Low Energy communication.
 - The VL53L0X sensor functionality is made possible by the [VL53L0X library](https://github.com/pololu/vl53l0x-arduino).
+- The hardware for this project is based on the Seeed Studio XIAO board, which is built around the nRF52840 chipset. The Seeed Studio XIAO is a compact and powerful development board that supports various features, including BLE, making it an ideal choice for this smart bottle counter project.
