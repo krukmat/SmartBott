@@ -40,10 +40,9 @@ The `transmitBottleCount()` function sends the current bottle count over BLE to 
 
 You can customize the behavior of the smart bottle counter by modifying the following parameters:
 
-- `BottleType`: Enumerates the different bottle types (`LITRE_1_5` and `LITRE_0_5`). Adjust these according to your specific bottle sizes.
+- `BottleType`: Enumerates the different bottle types (`LITRE_1_5`,`LITRE_0_5`, `LITRE_1`). Adjust these according to your specific bottle sizes.
 - `THRESHOLD_FULL`: Defines the sensor reading threshold for a bottle to be considered full.
-- `THRESHOLD_HALF_1_5` and `THRESHOLD_HALF_0_5`: Define the sensor reading thresholds for a bottle to be considered half-full for each bottle type.
-- `THRESHOLD_EMPTY_1_5` and `THRESHOLD_EMPTY_0_5`: Define the sensor reading thresholds for a bottle to be considered empty for each bottle type.
+- `THRESHOLD_EMPTY_1_5` and `THRESHOLD_EMPTY_0_5` and `THRESHOLD_EMPTY_1` : Define the sensor reading thresholds for a bottle to be considered empty for each bottle type.
 
 You can adjust these values based on your sensor's calibration and the desired level of accuracy for detecting bottle fullness.
 
