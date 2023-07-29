@@ -21,6 +21,7 @@ const int THRESHOLD_EMPTY_0_5 = 240;
 int bottleCount = 0;
 enum Measure { EMPTY, HALF, FULL };
 Measure previousMeasure = EMPTY;
+const int ledPin = LED_BUILTIN; // pin to use for the LED
 
 void setup() {
   Wire.begin();
@@ -40,16 +41,16 @@ void setup() {
 
   // set advertised local name and service UUID:
   BLE.setLocalName("Hydro");
-  BLE.setAdvertisedService(ledService);
+  BLE.setAdvertisedService(bottleService);
 
   // add the characteristic to the service
-  ledService.addCharacteristic(switchCharacteristic);
+  bottleService.addCharacteristic(bottleCharacteristic);
 
   // add service
-  BLE.addService(ledService);
+  BLE.addService(bottleService);
 
   // set the initial value for the characeristic:
-  switchCharacteristic.writeValue(0);
+  bottleCharacteristic.writeValue(0);
 
   // start advertising
   BLE.advertise();
@@ -77,7 +78,7 @@ void updateBottleCount(int reading) {
   Measure currentMeasure;
   if (reading <= THRESHOLD_FULL) {
     currentMeasure = FULL;
-  } else if ((bottleType == LITRE_1_5 && reading <= THRESHOLD_HALF_1_5) || (bottleType == LITRE_0_5 && reading <= THRESHOLD_HALF_0_5)) {
+  } else if ((bottleType == LITRE_1_5 && reading >= THRESHOLD_HALF_1_5 && reading < THRESHOLD_EMPTY_1_5) || (bottleType == LITRE_0_5 && reading >= THRESHOLD_HALF_0_5 && reading < THRESHOLD_EMPTY_0_5)) {
     currentMeasure = HALF;
   } else {
     currentMeasure = EMPTY;
