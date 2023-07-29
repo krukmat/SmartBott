@@ -9,12 +9,13 @@ BLEService bottleService("19B10001-E8F2-537E-4F6C-D104768A1214");
 BLEUnsignedIntCharacteristic bottleCharacteristic("19B10002-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify | BLEWrite);
 
 // Define the bottle types and sensor thresholds
-enum BottleType { LITRE_1_5, LITRE_0_5 };
+enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1 };
 BottleType bottleType = LITRE_1_5;
 const int THRESHOLD_FULL = 60;
-const int THRESHOLD_HALF_1_5 = 190;
-const int THRESHOLD_HALF_0_5 = 130;
+//const int THRESHOLD_HALF_1_5 = 190;
+//const int THRESHOLD_HALF_0_5 = 130;
 const int THRESHOLD_EMPTY_1_5 = 300;
+const int THRESHOLD_EMPTY_1 = 280;
 const int THRESHOLD_EMPTY_0_5 = 240;
 
 // Define the bottle count and previous measure
@@ -78,7 +79,7 @@ void updateBottleCount(int reading) {
   Measure currentMeasure;
   if (reading <= THRESHOLD_FULL) {
     currentMeasure = FULL;
-  } else if ((bottleType == LITRE_1_5 && reading >= THRESHOLD_HALF_1_5 && reading < THRESHOLD_EMPTY_1_5) || (bottleType == LITRE_0_5 && reading >= THRESHOLD_HALF_0_5 && reading < THRESHOLD_EMPTY_0_5)) {
+  } else if ((bottleType == LITRE_1_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1_5) || (bottleType == LITRE_0_5 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  (bottleType == LITRE_1 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)) {
     currentMeasure = HALF;
   } else {
     currentMeasure = EMPTY;
