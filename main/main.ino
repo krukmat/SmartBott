@@ -10,12 +10,12 @@ BLEUnsignedIntCharacteristic bottleCharacteristic("19B10002-E8F2-537E-4F6C-D1047
 
 // Define the bottle types and sensor thresholds
 enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1 };
-BottleType bottleType = LITRE_1_5;
+BottleType bottleType = LITRE_1;
 const int THRESHOLD_FULL = 60;
 //const int THRESHOLD_HALF_1_5 = 190;
 //const int THRESHOLD_HALF_0_5 = 130;
 const int THRESHOLD_EMPTY_1_5 = 300;
-const int THRESHOLD_EMPTY_1 = 280;
+const int THRESHOLD_EMPTY_1 = 270;
 const int THRESHOLD_EMPTY_0_5 = 240;
 
 // Define the bottle count and previous measure
@@ -65,13 +65,23 @@ void setup() {
 
 void loop() {
   // Check the sensor reading and update the bottle count
+  BLEDevice central = BLE.central();
   int reading = sensor.readRangeSingleMillimeters();
   updateBottleCount(reading);
+  Serial.print("Reading: ");
+  Serial.println(reading);
 
-  // Transmit the bottle count over BLE when a device is connected
-  if (BLE.central()) {
-    transmitBottleCount();
+  if (central) {
+    Serial.print("Connected to central: ");
+    // print the central's MAC address:
+    Serial.println(central.address());
+    digitalWrite(ledPin, HIGH); // changed from LOW to HIGH  
+    if (central.connected() && bottleCount > 0) {
+      transmitBottleCount();
+      bottleCount = 0;
+    }
   }
+  delay(1000);
 }
 
 void updateBottleCount(int reading) {
@@ -84,9 +94,12 @@ void updateBottleCount(int reading) {
   } else {
     currentMeasure = EMPTY;
   }
+  Serial.print("Current Measure: ");
+  Serial.println(currentMeasure);
 
   if ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY)) {
     bottleCount++;
+    Serial.println(bottleCount);
   }
 
   previousMeasure = currentMeasure;
@@ -94,6 +107,8 @@ void updateBottleCount(int reading) {
 
 void transmitBottleCount() {
   // Transmit the bottle count over BLE
+  Serial.print("New bottlecount to send: ");
+  Serial.println(bottleCount);
   bottleCharacteristic.writeValue(bottleCount);
   bottleCount = 0;
 }
