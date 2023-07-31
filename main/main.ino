@@ -89,7 +89,10 @@ void updateBottleCount(int reading) {
   Measure currentMeasure;
   if (reading <= THRESHOLD_FULL) {
     currentMeasure = FULL;
-  } else if ((bottleType == LITRE_1_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1_5) || (bottleType == LITRE_0_5 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  (bottleType == LITRE_1 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)) {
+  } else if ( (bottleType == LITRE_1_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1_5) || 
+              (bottleType == LITRE_0_5 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  
+              (bottleType == LITRE_1 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)
+            ) {
     currentMeasure = HALF;
   } else {
     currentMeasure = EMPTY;
