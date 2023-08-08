@@ -78,7 +78,6 @@ void loop() {
     digitalWrite(ledPin, HIGH); // changed from LOW to HIGH  
     if (central.connected() && bottleCount > 0) {
       transmitBottleCount();
-      bottleCount = 0;
     }
   }
   delay(1000);
@@ -91,8 +90,7 @@ void updateBottleCount(int reading) {
     currentMeasure = FULL;
   } else if ( (bottleType == LITRE_1_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1_5) || 
               (bottleType == LITRE_0_5 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  
-              (bottleType == LITRE_1 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)
-            ) {
+              (bottleType == LITRE_1 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)) {
     currentMeasure = HALF;
   } else {
     currentMeasure = EMPTY;
@@ -102,6 +100,7 @@ void updateBottleCount(int reading) {
 
   if ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY)) {
     bottleCount++;
+    //bottleCount = 80;
     Serial.println(bottleCount);
   }
 
