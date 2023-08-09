@@ -62,8 +62,7 @@ const App = () => {
     <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Scanner</Text>
       <Text>Scanner</Text>
-      <Text>Scanner</Text>
-      <Button title="Scan for Devices" onPress={handleScanDevices} />
+      <Button title="Scan for SmartBotts" onPress={handleScanDevices} />
       <FlatList
         data={devices}
         keyExtractor={(item) => item.id}
@@ -76,23 +75,15 @@ const App = () => {
       {selectedDevice && (
         <View>
           <Text>Selected Device: {selectedDevice.localName || 'Unknown Device'}</Text>
-          <Button title="Read Value" onPress={handleReadValue} />
-          <Text>Integer Value: {integerValue}</Text>
-
           {selectedService ? (
             <View>
-              <Text>Selected Service: {selectedService.id}</Text>
+              <Button title="Get data" onPress={handleReadValue} />
+              <Text>Bottles consumed: {integerValue}</Text>
             </View>
           ) : (
-            <FlatList
-              data={selectedDevice.services}
-              keyExtractor={(item) => item.uuid}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleSelectService(item)}>
-                  <Text>{item.uuid}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            <View>
+              <Text>Please wait</Text>
+            </View>
           )}
         </View>
       )}

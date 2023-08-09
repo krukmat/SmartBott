@@ -60,6 +60,18 @@ void setup() {
   sensor.init();
   sensor.setTimeout(500);
 
+  // Read Handler
+  // Set up the read handler for the bottleCharacteristic
+  bottleCharacteristic.setEventHandler(BLEWritten, [](BLEDevice central, BLECharacteristic characteristic) {
+    // This function will be called when the central device writes to the characteristic.
+    // You can include your custom logic here to handle the written value.
+    // For example, you might want to update the bottle type based on the received value.
+    int receivedValue = bottleCharacteristic.value(); // Retrieve the written value
+    Serial.println("Reset the bottle count");
+    bottleCount = 0;
+    // Include your logic here to handle the receivedValue
+  });
+
   Serial.println("Hydro reader");
 }
 
@@ -78,6 +90,7 @@ void loop() {
     digitalWrite(ledPin, HIGH); // changed from LOW to HIGH  
     if (central.connected() && bottleCount > 0) {
       transmitBottleCount();
+      //central.disconnect();
     }
   }
   delay(1000);
@@ -112,5 +125,4 @@ void transmitBottleCount() {
   Serial.print("New bottlecount to send: ");
   Serial.println(bottleCount);
   bottleCharacteristic.writeValue(bottleCount);
-  bottleCount = 0;
 }

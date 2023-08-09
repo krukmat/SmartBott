@@ -5,6 +5,7 @@ var Buffer = require('buffer/').Buffer;
 
 const bleManager = new BleManager();
 export let discoveredDevices = [];
+let deviceId;
 
 export const scanForDevices = async () => {
   try {
@@ -19,6 +20,7 @@ export const scanForDevices = async () => {
           console.log(device.id);
           if (discoveredDevices.length<= 0 && device.localName == 'Hydro')
             discoveredDevices.push(device);
+            deviceId = device.id;
             return device;
         }
 
@@ -54,7 +56,10 @@ export const readCharacteristic = async (characteristic) => {
     const data = await characteristic.read();
     console.log(data);
     const integerValue = Buffer.from(data.value, 'base64').readUIntLE(0,2);
+    await characteristic.writeWithResponse([1]);
     console.log('Integer value:', integerValue);
+    bleManager.cancelDeviceConnection(deviceId);
+    //TODO: Desconectar el device
     return integerValue;
   } catch (error) {
     console.error('Error reading characteristic:', error);
