@@ -63,17 +63,24 @@ const App = () => {
   return (
     <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Scanner</Text>
-      <Button title="Scan for SmartBotts" onPress={handleScanDevices} />
-      <FlatList
-        data={devices}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectDevice(item)}>
-            <Text>{item.localName || 'Unknown Device'}</Text>
-          </TouchableOpacity>
-        )}
-      />
-      {selectedDevice && (
+      {!selectedDevice ? (
+        <Button title="Scan for SmartBotts" onPress={handleScanDevices} />
+      ) : (
+        <View>
+          <Text>.</Text>
+        </View>
+      )}
+      {!selectedDevice ? (
+        <FlatList
+          data={devices}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleSelectDevice(item)}>
+              <Text>{item.localName || 'Unknown Device'}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      ) : (
         <View>
           <Text>Selected Device: {selectedDevice.localName || 'Unknown Device'}</Text>
           {selectedService ? (
@@ -86,10 +93,9 @@ const App = () => {
               <Text>Please wait</Text>
             </View>
           )}
-          </View>
-        )}
+        </View>
+      )}
     </View>
-    
   );
 };
 
