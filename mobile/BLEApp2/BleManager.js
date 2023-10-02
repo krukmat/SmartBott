@@ -6,6 +6,7 @@ var Buffer = require('buffer/').Buffer;
 
 const bleManager = new BleManager();
 export let discoveredDevices = [];
+let totalbottles = 0;
 let deviceId;
 
 export const scanForDevices = async () => {
@@ -60,15 +61,18 @@ export const readCharacteristic = async (characteristic) => {
     let integerValue = 0;
     if(data.value !== null){
       integerValue = Buffer.from(data.value, 'base64').readUIntLE(0,2);
+      if ((integerValue > 0) && (integerValue<1000)){
+        totalbottles+=integerValue;
+      }
     }
     const adata = [0x01, 0x02, 0x03]; // Your data as an array of hexadecimal values
     const dataString = adata.map(byte => byte.toString(16)).join('');
     await characteristic.writeWithResponse(dataString);
     console.log('1. Integer value:', integerValue);
     bleManager.cancelDeviceConnection(deviceId);
-    console.log('2. Integer value:', integerValue);
+    console.log('2. totalBottles:', totalbottles);
     //TODO: Desconectar el device
-    return integerValue;
+    return totalbottles;
   } catch (error) {
     console.error('Error reading characteristic:', error);
     throw error;
