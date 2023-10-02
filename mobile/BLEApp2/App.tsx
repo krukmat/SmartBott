@@ -47,6 +47,7 @@ const App = () => {
         console.info(selectedService);
         const value = await readCharacteristic(selectedService[0]);
         setIntegerValue(value);
+        handleSelectDevice(devices[0]);
       } catch (error) {
         console.error('Error reading value:', error);
       }
@@ -61,7 +62,6 @@ const App = () => {
 
   return (
     <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Scanner</Text>
       <Text>Scanner</Text>
       <Button title="Scan for SmartBotts" onPress={handleScanDevices} />
       <FlatList
