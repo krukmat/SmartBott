@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
 import { scanForDevices, connectToDevice, readCharacteristic, discoveredDevices } from './BleManager';
+import {GaugeChart} from './GaugeChart';
 
 const App = () => {
   const [devices, setDevices] = useState([]);
@@ -30,7 +31,7 @@ const App = () => {
       const discoveredServices = services;
       console.log("discoveredServices:");
       console.log(discoveredServices);
-      setSelectedService(services); // Update devices list
+      setSelectedService(discoveredServices); // Update devices list
     /*} catch (error) {
       console.error('Error connecting to device or discovering services:', error);
     }*/
@@ -78,16 +79,17 @@ const App = () => {
           {selectedService ? (
             <View>
               <Button title="Get data" onPress={handleReadValue} />
-              <Text>Bottles consumed: {integerValue}</Text>
+              <GaugeChart value={integerValue} />
             </View>
           ) : (
             <View>
               <Text>Please wait</Text>
             </View>
           )}
-        </View>
-      )}
+          </View>
+        )}
     </View>
+    
   );
 };
 
