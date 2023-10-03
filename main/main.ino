@@ -66,9 +66,11 @@ void setup() {
     // This function will be called when the central device writes to the characteristic.
     // You can include your custom logic here to handle the written value.
     // For example, you might want to update the bottle type based on the received value.
-    int receivedValue = bottleCharacteristic.value(); // Retrieve the written value
-    Serial.println("Reset the bottle count");
-    bottleCount = 0;
+    if (isAlpha(bottleCharacteristic.value()) == false){
+      int receivedValue = bottleCharacteristic.value(); // Retrieve the written value
+      Serial.println("Reset the bottle count");
+      bottleCount = 0;
+    }
     // Include your logic here to handle the receivedValue
   });
 
