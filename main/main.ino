@@ -110,7 +110,8 @@ void updateBottleCount(int reading) {
   }
   Serial.print("Current Measure: ");
   Serial.println(currentMeasure);
-
+  Serial.print("Bottle count:");
+  Serial.println(bottleCount);
   if ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY)) {
     bottleCount++;
     //bottleCount = 80;

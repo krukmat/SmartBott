@@ -61,12 +61,13 @@ export const readCharacteristic = async (characteristic) => {
     let integerValue = 0;
     if(data.value !== null){
       integerValue = Buffer.from(data.value, 'base64').readUIntLE(0,2);
-      if ((integerValue > 0) && (integerValue<1000)){
+      if ((integerValue > 0) && (integerValue<100)){
         totalbottles+=integerValue;
       }
     }
-    const adata = [0x01, 0x02, 0x03]; // Your data as an array of hexadecimal values
+    const adata = [0x01, 0x02]; // Your data as an array of hexadecimal values
     const dataString = adata.map(byte => byte.toString(16)).join('');
+    console.log('send: ', dataString);
     await characteristic.writeWithResponse(dataString);
     console.log('1. Integer value:', integerValue);
     bleManager.cancelDeviceConnection(deviceId);
