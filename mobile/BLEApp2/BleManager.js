@@ -53,9 +53,16 @@ export const connectToDevice = async (device) => {
 };
 
 export const sendVolume = async(characteristic, volume) => {
-  //const adata = [0x01, 0x02]; // Your data as an array of hexadecimal values
-  //const dataString = adata.map(byte => byte.toString(16)).join('');
-  const dataString = volume.split("").map(c => c.charCodeAt(0).toString(16).padStart(2, "0")).join("");
+  let adata = [];
+  if (volume === "0")
+      adata = [0x02, 0x03]; // Your data as an array of hexadecimal values
+  if (volume === "1")
+    adata = [0x03, 0x04]; // Your data as an array of hexadecimal values
+  if (volume === "2")
+    adata = [0x05, 0x06]; // Your data as an array of hexadecimal values
+
+  const dataString = adata.map(byte => byte.toString(16)).join('');
+  //const dataString = volume.split("").map(c => c.charCodeAt(0).toString(16).padStart(2, "0")).join("");
   console.log(dataString);
   await characteristic.writeWithResponse(dataString);
   return 0;

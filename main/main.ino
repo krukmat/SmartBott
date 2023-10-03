@@ -10,7 +10,7 @@ BLEUnsignedIntCharacteristic bottleCharacteristic("19B10002-E8F2-537E-4F6C-D1047
 
 // Define the bottle types and sensor thresholds
 enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1 };
-BottleType bottleType = LITRE_1;
+BottleType bottleType = LITRE_0_5;
 const int THRESHOLD_FULL = 60;
 //const int THRESHOLD_HALF_1_5 = 190;
 //const int THRESHOLD_HALF_0_5 = 130;
@@ -66,19 +66,50 @@ void setup() {
     // This function will be called when the central device writes to the characteristic.
     // You can include your custom logic here to handle the written value.
     // For example, you might want to update the bottle type based on the received value.
-    Serial.println(bottleCharacteristic.value());
-    if (bottleCharacteristic.value() == 215){
+    Serial.print("+++++++++++++++++++++++++++++++++++++++++++++++++");
+
+    printData(characteristic.value(), characteristic.valueLength());
+    
+    uint8_t datas[characteristic.valueLength()];
+  characteristic.readValue(datas, characteristic.valueLength());
+    
+    if (datas[0] == 215){
       int receivedValue = bottleCharacteristic.value(); // Retrieve the written value
       Serial.println("Reset the bottle count");
       bottleCount = 0;
     } else {
       Serial.println("Define capacity");      
-      Serial.print(bottleCharacteristic.value());
-    }
+      if (datas[0] == 223) {
+        // 1 litre
+        bottleType = LITRE_1;
+        Serial.println("1 litre");
+      } else if (datas[0] == 219) {
+        // 0.5 litre
+        Serial.println("0.5 litre");
+        bottleType = LITRE_0_5;
+      } else{
+          bottleType = LITRE_1_5;
+          Serial.println("1.5 litre");        
+      }
+    } 
+   Serial.print("+++++++++++++++++++++++++++++++++++++++++++++++++");
+
     // Include your logic here to handle the receivedValue
   });
 
   Serial.println("Hydro reader");
+}
+
+void printData(const unsigned char data[], int length) {
+  for (int i = 0; i < length; i++) {
+    unsigned char b = data[i];
+    //not sure what this if statement does, but I think it adds 0 to small hex values that would otherwise be printed without them
+    if (b < 16) {
+      Serial.print("0");
+    }
+    //Prints each b value individually, I want to store the whole thing to a variable
+    Serial.print(b, HEX);
+  }
 }
 
 void loop() {
@@ -114,10 +145,10 @@ void updateBottleCount(int reading) {
   } else {
     currentMeasure = EMPTY;
   }
-  Serial.print("Current Measure: ");
-  Serial.println(currentMeasure);
-  Serial.print("Bottle count:");
-  Serial.println(bottleCount);
+  //Serial.print("Current Measure: ");
+  //Serial.println(currentMeasure);
+  //Serial.print("Bottle count:");
+  //Serial.println(bottleCount);
   if ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY)) {
     bottleCount++;
     //bottleCount = 80;
