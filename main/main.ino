@@ -78,6 +78,7 @@ void setup() {
       Serial.println("Reset the bottle count");
       bottleCount = 0;
     } else {
+      bottleCount = 0;
       Serial.println("Define capacity");      
       if (datas[0] == 223) {
         // 1 litre

@@ -53,7 +53,7 @@ export const connectToDevice = async (device) => {
 };
 
 export const sendVolume = async(characteristic, volume) => {
-  let adata = [];
+  let adata = []; //black magic
   if (volume === "0")
       adata = [0x02, 0x03]; // Your data as an array of hexadecimal values
   if (volume === "1")
