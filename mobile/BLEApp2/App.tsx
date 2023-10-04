@@ -83,7 +83,9 @@ const App = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleSelectDevice(item)}>
-              <Text>{item.localName || 'Unknown Device'}</Text>
+              <View style={{ padding: 10, marginBottom: 10 }}>
+                  <Text>{item.localName || 'Unknown Device'}</Text>
+              </View>
             </TouchableOpacity>
           )}
         />
