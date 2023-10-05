@@ -101,18 +101,6 @@ void setup() {
   Serial.println("Hydro reader");
 }
 
-void printData(const unsigned char data[], int length) {
-  for (int i = 0; i < length; i++) {
-    unsigned char b = data[i];
-    //not sure what this if statement does, but I think it adds 0 to small hex values that would otherwise be printed without them
-    if (b < 16) {
-      Serial.print("0");
-    }
-    //Prints each b value individually, I want to store the whole thing to a variable
-    Serial.print(b, HEX);
-  }
-}
-
 void loop() {
   // Check the sensor reading and update the bottle count
   BLEDevice central = BLE.central();
