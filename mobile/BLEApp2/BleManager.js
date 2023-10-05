@@ -69,6 +69,14 @@ export const sendVolume = async(characteristic, volume) => {
 
 }
 
+export const sendStartCount = async(characteristic) => {
+  let adata = [0x07, 0x08];//black magic
+  const dataString = adata.map(byte => byte.toString(16)).join('');
+  console.log(dataString);
+  await characteristic.writeWithResponse(dataString);
+  return 0;
+}
+
 export const readCharacteristic = async (characteristic) => {
   try {
     console.log("char: ");

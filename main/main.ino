@@ -18,6 +18,8 @@ const int THRESHOLD_EMPTY_1_5 = 300;
 const int THRESHOLD_EMPTY_1 = 270;
 const int THRESHOLD_EMPTY_0_5 = 240;
 
+boolean counterEnabled = true;
+
 // Define the bottle count and previous measure
 int bottleCount = 0;
 enum Measure { EMPTY, HALF, FULL };
@@ -68,10 +70,10 @@ void setup() {
     // For example, you might want to update the bottle type based on the received value.
     Serial.print("+++++++++++++++++++++++++++++++++++++++++++++++++");
 
-    printData(characteristic.value(), characteristic.valueLength());
     
     uint8_t datas[characteristic.valueLength()];
   characteristic.readValue(datas, characteristic.valueLength());
+    Serial.println(datas[0]);
     
     if (datas[0] == 215){
       int receivedValue = bottleCharacteristic.value(); // Retrieve the written value
@@ -88,9 +90,12 @@ void setup() {
         // 0.5 litre
         Serial.println("0.5 litre");
         bottleType = LITRE_0_5;
-      } else{
+      } else if (datas[0] == 231) {
           bottleType = LITRE_1_5;
           Serial.println("1.5 litre");        
+      } else {
+        // toggle the bottle count init
+        counterEnabled = !counterEnabled;
       }
     } 
    Serial.print("+++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -138,8 +143,9 @@ void updateBottleCount(int reading) {
   //Serial.println(currentMeasure);
   //Serial.print("Bottle count:");
   //Serial.println(bottleCount);
-  if ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY)) {
+  if (counterEnabled && ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY))) {
     bottleCount++;
+    counterEnabled = false;
     //bottleCount = 80;
     Serial.println(bottleCount);
   }

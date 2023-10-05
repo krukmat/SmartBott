@@ -1,7 +1,7 @@
 import {Picker} from '@react-native-picker/picker';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, Modal } from 'react-native';
-import { scanForDevices, connectToDevice, readCharacteristic, discoveredDevices,  sendVolume} from './BleManager';
+import { scanForDevices, connectToDevice, readCharacteristic, discoveredDevices,  sendVolume, sendStartCount} from './BleManager';
 import { GaugeChart } from './GaugeChart';
 
 
@@ -39,6 +39,25 @@ const App = () => {
   const handleSelectService = (service) => {
     setSelectedService(service);
   };
+
+  // ...
+
+  const handleCountBottle = async () => {
+    if (selectedService) {
+      try {
+        await sendStartCount(selectedService[0]);
+
+      } catch (error) {
+        console.error('Error counting bottle:', error);
+      }
+    } else {
+      console.warn('No service selected.');
+    }
+  };
+
+// ...
+
+
 
   const handleReadValue = async () => {
     if (selectedService) {
@@ -94,6 +113,7 @@ const App = () => {
           <Text>Selected Device: {selectedDevice.localName || 'Unknown Device'}</Text>
           {selectedService ? (
             <View>
+              <Button title="Start count" onPress={handleCountBottle} />
               {/* Button to open the picklist */}
               <Button title="Select Volume" onPress={() => setIsPicklistVisible(true)} />
               {/* Picklist */}
