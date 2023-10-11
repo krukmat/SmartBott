@@ -16,13 +16,13 @@ const int THRESHOLD_FULL = 60;
 //const int THRESHOLD_HALF_0_5 = 130;
 const int THRESHOLD_EMPTY_1_5 = 300;
 const int THRESHOLD_EMPTY_1 = 270;
-const int THRESHOLD_EMPTY_0_5 = 240;
+const int THRESHOLD_EMPTY_0_5 = 230;
 
 boolean counterEnabled = true;
 
 // Define the bottle count and previous measure
 int bottleCount = 0;
-enum Measure { EMPTY, HALF, FULL };
+enum Measure { EMPTY, HALF, FULL, UNAVAILABLE };
 Measure previousMeasure = EMPTY;
 const int ledPin = LED_BUILTIN; // pin to use for the LED
 
@@ -130,27 +130,39 @@ void loop() {
 void updateBottleCount(int reading) {
   // Update the bottle count based on the sensor reading
   Measure currentMeasure;
-  if (reading <= THRESHOLD_FULL) {
+  if (reading>1000 || reading < THRESHOLD_FULL){
+    currentMeasure = UNAVAILABLE;
+    counterEnabled = false;
+    return;
+  }
+  counterEnabled = true;
+
+  if (reading > 0 && reading <= THRESHOLD_FULL) {
     currentMeasure = FULL;
   } else if ( (bottleType == LITRE_1_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1_5) || 
-              (bottleType == LITRE_0_5 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  
-              (bottleType == LITRE_1 && reading >= THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)) {
+              (bottleType == LITRE_0_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  
+              (bottleType == LITRE_1 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)) {
     currentMeasure = HALF;
   } else {
     currentMeasure = EMPTY;
   }
-  //Serial.print("Current Measure: ");
-  //Serial.println(currentMeasure);
-  //Serial.print("Bottle count:");
-  //Serial.println(bottleCount);
+  Serial.print("PreviousMeasure: ");
+  Serial.println(previousMeasure);
+  Serial.print("Current Measure: ");
+  Serial.println(currentMeasure);
+  Serial.print("Bottle count:");
+  Serial.println(bottleCount);
+  Serial.print("Counter enabled:");
+  Serial.println(counterEnabled);
   if (counterEnabled && ((previousMeasure == HALF && currentMeasure == EMPTY) || (previousMeasure == FULL && currentMeasure == EMPTY))) {
     bottleCount++;
-    counterEnabled = false;
+    //counterEnabled = false;
     //bottleCount = 80;
     Serial.println(bottleCount);
   }
-
   previousMeasure = currentMeasure;
+
+
 }
 
 void transmitBottleCount() {
