@@ -5,10 +5,11 @@ This project utilizes a Seeed Studio XIAO board based on the nRF52840 chipset, a
 ## Prototype
 ![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/1.jpg "First prototype")
 ![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/2.jpg "Sensor")
+![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/3.jpg "Sensor")
 
 ## Mobile app - Android
-![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-1.jpg "Home")
-![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/1.jpg "Home")
+![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-1.png "Home")
+![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-2.png "Home")
 
 ## Mobile app - IOS
 
