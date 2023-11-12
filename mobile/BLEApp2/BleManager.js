@@ -77,7 +77,7 @@ export const sendStartCount = async(characteristic) => {
   return 0;
 }
 
-export const readCharacteristic = async (characteristic) => {
+export const readCharacteristic = async (characteristic, bottleMode) => {
   try {
     console.log("char: ");
     console.log(characteristic);
@@ -86,8 +86,12 @@ export const readCharacteristic = async (characteristic) => {
     let integerValue = 0;
     if(data.value !== null){
       integerValue = Buffer.from(data.value, 'base64').readUIntLE(0,2);
-      if ((integerValue > 0) && (integerValue<100)){
-        totalbottles+=integerValue;
+      if (bottleMode !== "3"){
+        if ((integerValue > 0) && (integerValue<100)){
+          totalbottles+=integerValue;
+        }  
+      } else {
+        totalbottles=integerValue;
       }
     }
     const adata = [0x01, 0x02]; // Your data as an array of hexadecimal values

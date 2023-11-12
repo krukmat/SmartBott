@@ -10,6 +10,7 @@ const App = () => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [integerValue, setIntegerValue] = useState(0);
+  let bottleMode = '3';
 
   // New state for the picklist
   const [isPicklistVisible, setIsPicklistVisible] = useState(false);
@@ -62,7 +63,7 @@ const App = () => {
   const handleReadValue = async () => {
     if (selectedService) {
       try {
-        const value = await readCharacteristic(selectedService[0]);
+        const value = await readCharacteristic(selectedService[0], bottleMode);
         setIntegerValue(value);
         handleSelectDevice(devices[0]);
       } catch (error) {
@@ -74,7 +75,8 @@ const App = () => {
   };
 
   // Function to handle the selection of an option from the picklist
-  const handleOptionSelect = async (option) => {
+  const handleOptionSelect = async (option: string) => {
+    bottleMode = option;
     setSelectedOption(option);
     setIsPicklistVisible(false);
     if (selectedService) {
@@ -126,13 +128,17 @@ const App = () => {
                       <Picker.Item label="500 cc" value="0" />
                       <Picker.Item label="1 litre" value="1" />
                       <Picker.Item label="1.5 litres" value="2" />
+                      <Picker.Item label="8 litres(litres mode)" value="3" />
                     </Picker>
 
                 <Button title="Close" onPress={() => setIsPicklistVisible(false)} />
               </View>
             </Modal>
             <Button title="Get data" onPress={handleReadValue} />
-            <GaugeChart value={integerValue} />
+            <GaugeChart
+              value={integerValue}
+              isLitreMode={bottleMode === '3'}
+              />
             </View>
           ) : (
             <View>

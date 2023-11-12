@@ -2,11 +2,13 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Svg, Circle, Text as SvgText } from 'react-native-svg';
 
-export const GaugeChart = ({ value }) => {
+export const GaugeChart = ({ value, isLitreMode }) => {
   const radius = 80;
   const circumference = 2 * Math.PI * radius;
   const strokeWidth = 10;
-  const dashArray = `${(value / 10) * circumference} ${circumference}`;
+  const dashArray = isLitreMode
+    ? `${(value / 6) * circumference} ${circumference}`
+    : `${(value / 10) * circumference} ${circumference}`;
 
   return (
     <View>
@@ -22,7 +24,7 @@ export const GaugeChart = ({ value }) => {
           strokeLinecap="round"
           transform={`rotate(90 ${radius} ${radius})`}
         />
-        {value >= 10 && (
+        {value >= 10 && !isLitreMode && (
           <SvgText
             x={radius}
             y={radius + 10}
@@ -35,8 +37,9 @@ export const GaugeChart = ({ value }) => {
         )}
       </Svg>
       <Text style={{ textAlign: 'center', fontSize: 18 }}>
-        Bottles consumed: {value}
+        {isLitreMode ? `Litres remaining: ${1.5 * value}` : `Bottles consumed: ${value}`}
       </Text>
     </View>
   );
 };
+

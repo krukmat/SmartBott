@@ -9,14 +9,17 @@ BLEService bottleService("19B10001-E8F2-537E-4F6C-D104768A1214");
 BLEUnsignedIntCharacteristic bottleCharacteristic("19B10002-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify | BLEWrite);
 
 // Define the bottle types and sensor thresholds
-enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1 };
-BottleType bottleType = LITRE_0_5;
+enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1, LITRE_8};
+BottleType bottleType = LITRE_8;
 const int THRESHOLD_FULL = 60;
 //const int THRESHOLD_HALF_1_5 = 190;
 //const int THRESHOLD_HALF_0_5 = 130;
 const int THRESHOLD_EMPTY_1_5 = 300;
 const int THRESHOLD_EMPTY_1 = 270;
 const int THRESHOLD_EMPTY_0_5 = 230;
+
+const int THRESHOLD_EMPTY_8 = 320;
+
 
 boolean counterEnabled = true;
 
@@ -110,22 +113,52 @@ void loop() {
   // Check the sensor reading and update the bottle count
   BLEDevice central = BLE.central();
   int reading = sensor.readRangeSingleMillimeters();
-  updateBottleCount(reading);
   Serial.print("Reading: ");
   Serial.println(reading);
+  Serial.print("bottleType:");
+  Serial.println(bottleType);
+
+  if (bottleType != LITRE_8){
+    updateBottleCount(reading);    
+  }
+  else {
+    // contar la cantidad de litros remanente
+    countRemainingBottles(reading);
+  }
 
   if (central) {
     Serial.print("Connected to central: ");
     // print the central's MAC address:
     Serial.println(central.address());
     digitalWrite(ledPin, HIGH); // changed from LOW to HIGH  
-    if (central.connected() && bottleCount > 0) {
-      transmitBottleCount();
-      //central.disconnect();
-    }
+    if (central.connected()){
+        if ((bottleType != LITRE_8 && bottleCount > 0) || (bottleType == LITRE_8))
+          transmitBottleCount();
+      }
   }
   delay(1000);
 }
+
+void countRemainingBottles(int reading) {
+  int remainingLitres = 0;
+
+  if (reading >= 320) {
+    bottleCount = 0;
+  } else if (reading >= 305 && reading < 320) {
+    bottleCount = 1;
+  } else if (reading >= 235 && reading < 305) {
+    bottleCount = 2;
+  } else if (reading >= 175 && reading < 235) {
+    bottleCount = 3;
+  } else if (reading >= 125 && reading < 175) {
+    bottleCount = 4;
+  } else if (reading >= 70 && reading < 125) {
+    bottleCount = 5;
+  } else if (reading < 70) {
+    bottleCount = 6;
+  }
+}
+
 
 void updateBottleCount(int reading) {
   // Update the bottle count based on the sensor reading
@@ -141,7 +174,7 @@ void updateBottleCount(int reading) {
     currentMeasure = FULL;
   } else if ( (bottleType == LITRE_1_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1_5) || 
               (bottleType == LITRE_0_5 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_0_5) ||  
-              (bottleType == LITRE_1 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1)) {
+              (bottleType == LITRE_1 && reading > THRESHOLD_FULL && reading < THRESHOLD_EMPTY_1))  {
     currentMeasure = HALF;
   } else {
     currentMeasure = EMPTY;
