@@ -142,20 +142,38 @@ void loop() {
 void countRemainingBottles(int reading) {
   int remainingLitres = 0;
 
-  if (reading >= 320) {
+  if (reading >= 344) {
     bottleCount = 0;
-  } else if (reading >= 305 && reading < 320) {
+  } else if (reading >= 330 && reading < 344) {
     bottleCount = 1;
-  } else if (reading >= 235 && reading < 305) {
+  } else if (reading >= 313 && reading < 330) {
     bottleCount = 2;
-  } else if (reading >= 175 && reading < 235) {
+  } else if (reading >= 300 && reading < 313) {
     bottleCount = 3;
-  } else if (reading >= 125 && reading < 175) {
+  } else if (reading >= 260 && reading < 300) {
     bottleCount = 4;
-  } else if (reading >= 70 && reading < 125) {
+  } else if (reading >= 245 && reading < 260) {
     bottleCount = 5;
-  } else if (reading < 70) {
+  } else if (reading >= 223 && reading < 245) {
     bottleCount = 6;
+  } else if (reading >= 193 && reading < 223) {
+    bottleCount = 7;
+  } else if (reading >= 175 && reading < 193) {
+    bottleCount = 8;
+  } else if (reading >= 160 && reading < 175) {
+    bottleCount = 9;
+  } else if (reading >= 140 && reading < 160) {
+    bottleCount = 10;
+  } else if (reading >= 120 && reading < 140) {
+    bottleCount = 11;
+  } else if (reading >= 102 && reading < 120) {
+    bottleCount = 12;
+  } else if (reading >= 85 && reading < 102) {
+    bottleCount = 13;
+  } else if (reading >= 70 && reading < 85) {
+    bottleCount = 14;
+  } else {
+    bottleCount = 15;
   }
 }
 

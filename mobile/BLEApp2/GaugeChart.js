@@ -7,7 +7,7 @@ export const GaugeChart = ({ value, isLitreMode }) => {
   const circumference = 2 * Math.PI * radius;
   const strokeWidth = 10;
   const dashArray = isLitreMode
-    ? `${(value / 6) * circumference} ${circumference}`
+    ? `${(value / 15) * circumference} ${circumference}`
     : `${(value / 10) * circumference} ${circumference}`;
 
   return (
@@ -37,7 +37,7 @@ export const GaugeChart = ({ value, isLitreMode }) => {
         )}
       </Svg>
       <Text style={{ textAlign: 'center', fontSize: 18 }}>
-        {isLitreMode ? `Litres remaining: ${1.5 * value}` : `Bottles consumed: ${value}`}
+        {isLitreMode ? `Litres remaining: ${0.5 * value}` : `Bottles consumed: ${value}`}
       </Text>
     </View>
   );

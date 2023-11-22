@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, Modal } from 'react-native';
 import { scanForDevices, connectToDevice, readCharacteristic, discoveredDevices,  sendVolume, sendStartCount} from './BleManager';
 import { GaugeChart } from './GaugeChart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DatePicker from 'react-native-datepicker';
+
 
 
 const App = () => {
@@ -10,12 +13,17 @@ const App = () => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [integerValue, setIntegerValue] = useState(0);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
   let bottleMode = '3';
 
   // New state for the picklist
   const [isPicklistVisible, setIsPicklistVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState(''); // To store the selected option
 
+
+  
   const handleScanDevices = async () => {
     try {
       const scannedDevices = await scanForDevices();
@@ -37,42 +45,67 @@ const App = () => {
     }
   };
 
-  const handleSelectService = (service) => {
-    setSelectedService(service);
-  };
-
-  // ...
-
-  const handleCountBottle = async () => {
-    if (selectedService) {
-      try {
-        await sendStartCount(selectedService[0]);
-
-      } catch (error) {
-        console.error('Error counting bottle:', error);
-      }
-    } else {
-      console.warn('No service selected.');
-    }
-  };
-
 // ...
 
 
 
-  const handleReadValue = async () => {
-    if (selectedService) {
-      try {
-        const value = await readCharacteristic(selectedService[0], bottleMode);
-        setIntegerValue(value);
-        handleSelectDevice(devices[0]);
-      } catch (error) {
-        console.error('Error reading value:', error);
-      }
+const storeData = async (value) => {
+  try {
+    const timestamp = new Date().toISOString();
+    const data = { value, timestamp };
+    await AsyncStorage.setItem('integerValueData', JSON.stringify(data));
+  } catch (error) {
+    console.error('Error storing data:', error);
+  }
+};
+
+const retrieveData = async () => {
+  try {
+    const storedData = await AsyncStorage.getItem('integerValueData');
+    if (storedData !== null) {
+      const { value, timestamp } = JSON.parse(storedData);
+      console.log('Retrieved data:', { value, timestamp });
+      // Puedes manejar los datos recuperados como desees.
     } else {
-      console.warn('No service selected.');
+      console.log('No data stored yet.');
     }
-  };
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+  }
+};
+
+const retrieveDataBetweenDates = async (startDate, endDate) => {
+  try {
+    const allData = await AsyncStorage.getAllKeys();
+    const filteredData = await AsyncStorage.multiGet(allData);
+    
+    const dataBetweenDates = filteredData
+      .map(([key, value]) => JSON.parse(value))
+      .filter(({ timestamp }) => {
+        const date = new Date(timestamp);
+        return date >= startDate && date <= endDate;
+      });
+
+    console.log('Data between dates:', dataBetweenDates);
+  } catch (error) {
+    console.error('Error retrieving data between dates:', error);
+  }
+};
+
+const handleReadValue = async () => {
+  if (selectedService) {
+    try {
+      const value = await readCharacteristic(selectedService[0], bottleMode);
+      setIntegerValue(value);
+      storeData(value); // Almacena el valor junto con la fecha/hora
+      handleSelectDevice(devices[0]);
+    } catch (error) {
+      console.error('Error reading value:', error);
+    }
+  } else {
+    console.warn('No service selected.');
+  }
+};
 
   // Function to handle the selection of an option from the picklist
   const handleOptionSelect = async (option: string) => {
@@ -86,6 +119,7 @@ const App = () => {
 
   useEffect(() => {
     setDevices([...discoveredDevices]);
+    retrieveData();
   }, [discoveredDevices]);
 
   return (
@@ -99,6 +133,7 @@ const App = () => {
         </View>
       )}
       {!selectedDevice ? (
+        
         <FlatList
           data={devices}
           keyExtractor={(item) => item.id}
@@ -115,26 +150,7 @@ const App = () => {
           <Text>Selected Device: {selectedDevice.localName || 'Unknown Device'}</Text>
           {selectedService ? (
             <View>
-              <Button title="Start count" onPress={handleCountBottle} />
-              {/* Button to open the picklist */}
-              <Button title="Select Volume" onPress={() => setIsPicklistVisible(true)} />
-              {/* Picklist */}
-              <Modal visible={isPicklistVisible}>
-              <View>
-              <Picker
-                      selectedValue={selectedOption}
-                      onValueChange={(itemValue, itemIndex) => handleOptionSelect(itemValue)}
-                    >
-                      <Picker.Item label="500 cc" value="0" />
-                      <Picker.Item label="1 litre" value="1" />
-                      <Picker.Item label="1.5 litres" value="2" />
-                      <Picker.Item label="8 litres(litres mode)" value="3" />
-                    </Picker>
-
-                <Button title="Close" onPress={() => setIsPicklistVisible(false)} />
-              </View>
-            </Modal>
-            <Button title="Get data" onPress={handleReadValue} />
+            <Button title="Get latest data" onPress={handleReadValue} />
             <GaugeChart
               value={integerValue}
               isLitreMode={bottleMode === '3'}
