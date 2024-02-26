@@ -4,7 +4,7 @@ import { View, Text, Button, FlatList, TouchableOpacity, Modal } from 'react-nat
 import { scanForDevices, connectToDevice, readCharacteristic, discoveredDevices,  sendVolume, sendStartCount} from './BleManager';
 import { GaugeChart } from './GaugeChart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DatePicker from 'react-native-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
@@ -21,9 +21,17 @@ const App = () => {
   // New state for the picklist
   const [isPicklistVisible, setIsPicklistVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState(''); // To store the selected option
+  const [isDatePickerModalVisible, setIsDatePickerModalVisible] = useState(false);
+  const [activeDatePicker, setActiveDatePicker] = useState(null);
+  
 
 
   
+  const toggleDatePickerModal = (datePickerType) => {
+    setActiveDatePicker(datePickerType);
+    setIsDatePickerModalVisible(!isDatePickerModalVisible);
+  };
+
   const handleScanDevices = async () => {
     try {
       const scannedDevices = await scanForDevices();
@@ -125,6 +133,45 @@ const handleReadValue = async () => {
   return (
     <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Scanner</Text>
+      <Button title="Select Start Date" onPress={() => toggleDatePickerModal('start')} />
+      <Button title="Select End Date" onPress={() => toggleDatePickerModal('end')} />
+      
+      {isDatePickerModalVisible && (
+        <Modal animationType="slide" transparent={true} visible={isDatePickerModalVisible}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {activeDatePicker === 'start' && (
+              <DateTimePicker
+                value={new Date()} // You can set the default value as needed
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  if (selectedDate) {
+                    console.info('Start: ');
+                    console.info(selectedDate);
+                    setStartDate(selectedDate.toISOString());
+                  }
+                  toggleDatePickerModal();
+                }}
+              />
+            )}
+            {activeDatePicker === 'end' && (
+              <DateTimePicker
+                value={new Date()} // You can set the default value as needed
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  if (selectedDate) {
+                    console.info('End: ');
+                    console.info(selectedDate);
+                    setEndDate(selectedDate.toISOString());
+                  }
+                  toggleDatePickerModal();
+                }}
+              />
+            )}
+          </View>
+        </Modal>
+      )}
       {!selectedDevice ? (
         <Button title="Scan for SmartBotts" onPress={handleScanDevices} />
       ) : (

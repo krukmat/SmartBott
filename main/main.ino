@@ -30,9 +30,9 @@ Measure previousMeasure = EMPTY;
 const int ledPin = LED_BUILTIN; // pin to use for the LED
 
 void setup() {
-  Wire.begin();
   Serial.begin(9600);
-  while (!Serial);
+  //Wire.begin();
+  //while (!Serial);
 
   // set LED pin to output mode
   pinMode(ledPin, OUTPUT);
