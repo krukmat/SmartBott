@@ -27,12 +27,12 @@ boolean counterEnabled = true;
 int bottleCount = 0;
 enum Measure { EMPTY, HALF, FULL, UNAVAILABLE };
 Measure previousMeasure = EMPTY;
-const int ledPin = LED_BUILTIN; // pin to use for the LED
+const int ledPin = D10; // pin to use for the LED
 
 void setup() {
   Serial.begin(9600);
-  //Wire.begin();
-  //while (!Serial);
+  Wire.begin();
+  while (!Serial);
 
   // set LED pin to output mode
   pinMode(ledPin, OUTPUT);
