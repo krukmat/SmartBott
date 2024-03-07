@@ -141,10 +141,9 @@ void loop() {
 
 void countRemainingBottles(int reading) {
   int remainingLitres = 0;
-
-  if (reading >= 344) {
+  if (reading >= 340) {
     bottleCount = 0;
-  } else if (reading >= 330 && reading < 344) {
+  } else if (reading >= 330 && reading < 340) {
     bottleCount = 1;
   } else if (reading >= 313 && reading < 330) {
     bottleCount = 2;
