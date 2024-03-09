@@ -23,6 +23,11 @@ const int THRESHOLD_EMPTY_8 = 320;
 
 boolean counterEnabled = true;
 
+// bottle definitions
+const float radio = 7.5; // en cm
+const float altura_total = 40; // en cm
+const float capacidad_total = 7.5; // en litros
+
 // Define the bottle count and previous measure
 int bottleCount = 0;
 enum Measure { EMPTY, HALF, FULL, UNAVAILABLE };
@@ -36,6 +41,7 @@ void setup() {
 
   // set LED pin to output mode
   pinMode(ledPin, OUTPUT);
+  
   digitalWrite(ledPin, LOW); // changed from LOW to HIGH     
 
   // begin initialization
@@ -63,7 +69,9 @@ void setup() {
 
   // Initialize the sensor
   sensor.init();
-  sensor.setTimeout(500);
+  // Iniciar medición
+  sensor.startContinuous();
+  //sensor.setTimeout(500);
 
   // Read Handler
   // Set up the read handler for the bottleCharacteristic
@@ -109,28 +117,41 @@ void setup() {
   Serial.println("Hydro reader");
 }
 
+float capacity(int distancia){
+  // Convertir distancia a altura del líquido (en cm)
+  float altura_liquido = altura_total - distancia / 10.0; // convertir de mm a cm
+  Serial.println(altura_liquido);
+  
+  // Calcular el volumen del líquido en el recipiente (en litros)
+  float volumen_liquido = PI * pow(radio, 2) * altura_liquido / 1000.0;
+  Serial.println(volumen_liquido);
+  return volumen_liquido;
+}
+
 void loop() {
   // Check the sensor reading and update the bottle count
+  digitalWrite(ledPin, LOW);
   BLEDevice central = BLE.central();
-  int reading = sensor.readRangeSingleMillimeters();
+  int reading = sensor.readRangeContinuousMillimeters();
   Serial.print("Reading: ");
   Serial.println(reading);
   Serial.print("bottleType:");
   Serial.println(bottleType);
 
   if (bottleType != LITRE_8){
-    updateBottleCount(reading);    
+    //updateBottleCount(reading);    
+    bottleCount = capacity(reading) * 100;
   }
   else {
     // contar la cantidad de litros remanente
-    countRemainingBottles(reading);
+    //countRemainingBottles(reading);
+    bottleCount = capacity(reading) * 100;
   }
 
   if (central) {
     Serial.print("Connected to central: ");
     // print the central's MAC address:
     Serial.println(central.address());
-    digitalWrite(ledPin, HIGH); // changed from LOW to HIGH  
     if (central.connected()){
         if ((bottleType != LITRE_8 && bottleCount > 0) || (bottleType == LITRE_8))
           transmitBottleCount();
