@@ -37,7 +37,7 @@ export const GaugeChart = ({ value, isLitreMode }) => {
         )}
       </Svg>
       <Text style={{ textAlign: 'center', fontSize: 18 }}>
-        {isLitreMode ? `Litres remaining: ${0.5 * value}` : `Bottles consumed: ${value}`}
+        {isLitreMode ? `Litres remaining: ${value / 100}` : `Bottles consumed: ${value}`}
       </Text>
     </View>
   );
