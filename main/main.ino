@@ -27,7 +27,7 @@ boolean counterEnabled = true;
 int bottleCount = 0;
 enum Measure { EMPTY, HALF, FULL, UNAVAILABLE };
 Measure previousMeasure = EMPTY;
-const int ledPin = D10; // pin to use for the LED
+const int ledPin = LED_BUILTIN; // D10; // pin to use for the LED
 
 void setup() {
   Serial.begin(9600);
@@ -36,6 +36,7 @@ void setup() {
 
   // set LED pin to output mode
   pinMode(ledPin, OUTPUT);
+  
   digitalWrite(ledPin, LOW); // changed from LOW to HIGH     
 
   // begin initialization
@@ -111,6 +112,7 @@ void setup() {
 
 void loop() {
   // Check the sensor reading and update the bottle count
+  digitalWrite(ledPin, LOW);
   BLEDevice central = BLE.central();
   int reading = sensor.readRangeSingleMillimeters();
   Serial.print("Reading: ");
@@ -130,7 +132,6 @@ void loop() {
     Serial.print("Connected to central: ");
     // print the central's MAC address:
     Serial.println(central.address());
-    digitalWrite(ledPin, HIGH); // changed from LOW to HIGH  
     if (central.connected()){
         if ((bottleType != LITRE_8 && bottleCount > 0) || (bottleType == LITRE_8))
           transmitBottleCount();
@@ -197,7 +198,7 @@ void updateBottleCount(int reading) {
     currentMeasure = EMPTY;
   }
   Serial.print("PreviousMeasure: ");
-  Serial.println(previousMeasure);
+  Serial.println(previousMeasure)
   Serial.print("Current Measure: ");
   Serial.println(currentMeasure);
   Serial.print("Bottle count:");
