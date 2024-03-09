@@ -24,9 +24,9 @@ const int THRESHOLD_EMPTY_8 = 320;
 boolean counterEnabled = true;
 
 // bottle definitions
-const float radio = 7.5; // en cm
-const float altura_total = 40; // en cm
-const float capacidad_total = 7.5; // en litros
+const float radio = 3; // en cm
+const float altura_total = 23; // en cm
+const float capacidad_total = 0.5; // en litros
 
 // Define the bottle count and previous measure
 int bottleCount = 0;
@@ -218,7 +218,7 @@ void updateBottleCount(int reading) {
     currentMeasure = EMPTY;
   }
   Serial.print("PreviousMeasure: ");
-  Serial.println(previousMeasure)
+  Serial.println(previousMeasure);
   Serial.print("Current Measure: ");
   Serial.println(currentMeasure);
   Serial.print("Bottle count:");
