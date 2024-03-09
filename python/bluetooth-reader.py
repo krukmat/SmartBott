@@ -20,7 +20,7 @@ lock = threading.Lock()
 
 def handle_data(handle, value_bytes):
     global last_data
-    decoded_data = int.from_bytes(value_bytes, byteorder='little')
+    decoded_data = 0.5 * int.from_bytes(value_bytes, byteorder='little')
     current_time = datetime.now().isoformat()
     with lock:
         last_data = (current_time, decoded_data)

@@ -47,7 +47,14 @@ const App = () => {
     setIsPicklistVisible(false); // Close the picklist when selecting a new device
     try {
       const services = await connectToDevice(device);
-      setSelectedService(services);
+      await setSelectedService(services);
+      // Llama a handleReadValue después de seleccionar el servicio
+      if (services.length > 0) {
+        setSelectedService(services[0]);
+        const value = await readCharacteristic(services[0], bottleMode);
+        setIntegerValue(value);
+  
+      }
     } catch (error) {
       console.error('Error connecting to device or discovering services:', error);
     }
@@ -133,45 +140,7 @@ const handleReadValue = async () => {
   return (
     <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Scanner</Text>
-      <Button title="Select Start Date" onPress={() => toggleDatePickerModal('start')} />
-      <Button title="Select End Date" onPress={() => toggleDatePickerModal('end')} />
       
-      {isDatePickerModalVisible && (
-        <Modal animationType="slide" transparent={true} visible={isDatePickerModalVisible}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          {activeDatePicker === 'start' && (
-              <DateTimePicker
-                value={new Date()} // You can set the default value as needed
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) {
-                    console.info('Start: ');
-                    console.info(selectedDate);
-                    setStartDate(selectedDate.toISOString());
-                  }
-                  toggleDatePickerModal();
-                }}
-              />
-            )}
-            {activeDatePicker === 'end' && (
-              <DateTimePicker
-                value={new Date()} // You can set the default value as needed
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) {
-                    console.info('End: ');
-                    console.info(selectedDate);
-                    setEndDate(selectedDate.toISOString());
-                  }
-                  toggleDatePickerModal();
-                }}
-              />
-            )}
-          </View>
-        </Modal>
-      )}
       {!selectedDevice ? (
         <Button title="Scan for SmartBotts" onPress={handleScanDevices} />
       ) : (
