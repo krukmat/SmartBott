@@ -25,7 +25,7 @@ boolean counterEnabled = true;
 
 // bottle definitions
 const float radio = 7.5; // en cm
-const float altura_total = 40; // en cm
+const float altura_total = 35; // en cm
 const float capacidad_total = 7.5; // en litros
 
 // Define the bottle count and previous measure
