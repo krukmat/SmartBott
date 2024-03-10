@@ -25,7 +25,7 @@ boolean counterEnabled = true;
 
 // bottle definitions
 const float radio = 7.5; // en cm
-const float altura_total = 30; // en cm
+const float altura_total = 33; // en cm
 const float capacidad_total = 7.5; // en litros
 
 // Define the bottle count and previous measure
@@ -71,7 +71,7 @@ void setup() {
   sensor.init();
   // Iniciar medición
   //sensor.startContinuous();
-  //sensor.setTimeout(500);
+  sensor.setTimeout(500);
 
   // Read Handler
   // Set up the read handler for the bottleCharacteristic
@@ -144,8 +144,8 @@ void loop() {
   }
   else {
     // contar la cantidad de litros remanente
-    //countRemainingBottles(reading);
-    bottleCount = capacity(reading) * 100;
+    countRemainingBottles(reading);
+    //bottleCount = capacity(reading) * 100;
   }
 
   if (central) {
