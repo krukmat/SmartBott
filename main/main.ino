@@ -25,7 +25,7 @@ boolean counterEnabled = true;
 
 // bottle definitions
 const float radio = 7.5; // en cm
-const float altura_total = 40; // en cm
+const float altura_total = 30; // en cm
 const float capacidad_total = 7.5; // en litros
 
 // Define the bottle count and previous measure
@@ -70,7 +70,7 @@ void setup() {
   // Initialize the sensor
   sensor.init();
   // Iniciar medición
-  sensor.startContinuous();
+  //sensor.startContinuous();
   //sensor.setTimeout(500);
 
   // Read Handler
@@ -132,7 +132,7 @@ void loop() {
   // Check the sensor reading and update the bottle count
   digitalWrite(ledPin, LOW);
   BLEDevice central = BLE.central();
-  int reading = sensor.readRangeContinuousMillimeters();
+  int reading = sensor.readRangeSingleMillimeters();
   Serial.print("Reading: ");
   Serial.println(reading);
   Serial.print("bottleType:");
@@ -195,6 +195,7 @@ void countRemainingBottles(int reading) {
   } else {
     bottleCount = 15;
   }
+  bottleCount*=100;
 }
 
 
