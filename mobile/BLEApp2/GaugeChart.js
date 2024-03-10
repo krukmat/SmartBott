@@ -7,7 +7,7 @@ export const GaugeChart = ({ value, isLitreMode }) => {
   const circumference = 2 * Math.PI * radius;
   const strokeWidth = 10;
   const dashArray = isLitreMode
-    ? `${(value / 15) * circumference} ${circumference}`
+    ? `${(value / 100) * circumference} ${circumference}`
     : `${(value / 10) * circumference} ${circumference}`;
 
   return (
