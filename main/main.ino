@@ -5,8 +5,8 @@
 VL53L0X sensor;
 
 // Define the BLE service and characteristic
-BLEService bottleService("19B10001-E8F2-537E-4F6C-D104768A1214");
-BLEUnsignedIntCharacteristic bottleCharacteristic("19B10002-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify | BLEWrite);
+BLEService bottleService("FB6D03F2-9F80-411B-BE52-FA618EBFF138");
+BLEUnsignedIntCharacteristic bottleCharacteristic("FB6D03F3-9F80-411B-BE52-FA618EBFF138", BLERead | BLENotify | BLEWrite);
 
 // Define the bottle types and sensor thresholds
 enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1, LITRE_8};
@@ -52,7 +52,7 @@ void setup() {
   }
 
   // set advertised local name and service UUID:
-  BLE.setLocalName("Hydro");
+  BLE.setLocalName("HydroTank");
   BLE.setAdvertisedService(bottleService);
 
   // add the characteristic to the service

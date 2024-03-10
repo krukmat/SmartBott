@@ -11,7 +11,7 @@ let deviceId;
 
 export const scanForDevices = async () => {
   try {
-    const devices = await bleManager.startDeviceScan(['19B10001-E8F2-537E-4F6C-D104768A1214'], null, (error, device) => {
+    const devices = await bleManager.startDeviceScan(['FB6D03F2-9F80-411B-BE52-FA618EBFF138'], null, (error, device) => {
         if (error) {
           // Handle error
           console.log('Error detected in scanning process');
@@ -21,7 +21,7 @@ export const scanForDevices = async () => {
           // Device was discovered
           console.log(device.localName);
           console.log(device.id);
-          if (discoveredDevices.length<= 0 && device.localName == 'Hydro')
+          if (discoveredDevices.length<= 0 && device.localName == 'HydroTank')
             discoveredDevices.push(device);
             deviceId = device.id;
             return device;
@@ -40,7 +40,7 @@ export const connectToDevice = async (device) => {
   try {
     await device.connect();
     const services = await device.discoverAllServicesAndCharacteristics();
-    const data = await services.characteristicsForService('19B10001-E8F2-537E-4F6C-D104768A1214');
+    const data = await services.characteristicsForService('FB6D03F2-9F80-411B-BE52-FA618EBFF138');
     console.log('connectToDevice: ');
     console.log(services);
     console.log('data');

@@ -10,7 +10,7 @@ import threading
 # Dirección MAC del dispositivo Bluetooth que estamos buscando
 TARGET_MAC_ADDRESS = "EC:DA:3B:BB:DD:E2"
 # UUID del servicio Bluetooth que estamos buscando
-SERVICE_UUID = "19b10002-e8f2-537e-4f6c-d104768a1214"
+SERVICE_UUID = "FB6D03F3-9F80-411B-BE52-FA618EBFF138"
 
 
 # Inicializar cliente Salesforce
