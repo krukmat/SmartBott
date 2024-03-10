@@ -166,7 +166,6 @@ const handleReadValue = async () => {
           <Text>Selected Device: {selectedDevice.localName || 'Unknown Device'}</Text>
           {selectedService ? (
             <View>
-            <Button title="Get latest data" onPress={handleReadValue} />
             <GaugeChart
               value={integerValue}
               isLitreMode={bottleMode === '3'}
