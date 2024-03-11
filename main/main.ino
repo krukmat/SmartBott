@@ -144,8 +144,8 @@ void loop() {
   }
   else {
     // contar la cantidad de litros remanente
-    countRemainingBottles(reading);
-    //bottleCount = capacity(reading) * 100;
+    //countRemainingBottles(reading);
+    bottleCount = capacity(reading) * 100;
   }
 
   if (central) {
