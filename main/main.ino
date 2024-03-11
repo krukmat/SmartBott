@@ -149,6 +149,9 @@ void loop() {
   }
 
   if (central) {
+    pinMode(LED_BLUE, OUTPUT);
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(LED_BLUE, LOW); // changed from LOW to HIGH     
     Serial.print("Connected to central: ");
     // print the central's MAC address:
     Serial.println(central.address());
@@ -156,6 +159,7 @@ void loop() {
         if ((bottleType != LITRE_8 && bottleCount > 0) || (bottleType == LITRE_8))
           transmitBottleCount();
       }
+    digitalWrite(LED_BLUE, HIGH); 
   }
   delay(1000);
 }
