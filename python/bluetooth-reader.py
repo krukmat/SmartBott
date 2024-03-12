@@ -51,4 +51,4 @@ if __name__ == "__main__":
         finally:
             adapter.stop()
             print("Bluetooth adapter stopped")
-        time.sleep(900)
+        time.sleep(21600)
