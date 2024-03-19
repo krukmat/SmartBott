@@ -25,14 +25,19 @@ boolean counterEnabled = true;
 
 // bottle definitions
 const float radio = 3; // en cm
-const float altura_total = 21; // en cm
-const float capacidad_total = 0.5; // en litros
+const float altura_total = 22; // en cm
+const float ajuste = 5; // cm
+const float capacidad_total = 0.75; // en litros
 
 // Define the bottle count and previous measure
 int bottleCount = 0;
 enum Measure { EMPTY, HALF, FULL, UNAVAILABLE };
 Measure previousMeasure = EMPTY;
 const int ledPin = LED_BUILTIN; // D10; // pin to use for the LED
+
+//#define HIGH_SPEED
+//#define HIGH_ACCURACY
+//#define LONG_RANGE
 
 void setup() {
   Serial.begin(9600);
@@ -71,7 +76,23 @@ void setup() {
   sensor.init();
   // Iniciar medición
   sensor.startContinuous();
-  //sensor.setTimeout(500);
+  sensor.setTimeout(500);
+
+  
+  #if defined LONG_RANGE
+    // lower the return signal rate limit (default is 0.25 MCPS)
+    sensor.setSignalRateLimit(0.1);
+    // increase laser pulse periods (defaults are 14 and 10 PCLKs)
+    sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 18);
+    sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 14);
+  #endif
+  #if defined HIGH_SPEED
+    // reduce timing budget to 20 ms (default is about 33 ms)
+    sensor.setMeasurementTimingBudget(20000);
+  #elif defined HIGH_ACCURACY
+    // increase timing budget to 200 ms
+    sensor.setMeasurementTimingBudget(200000);
+  #endif  
 
   // Read Handler
   // Set up the read handler for the bottleCharacteristic
@@ -119,7 +140,8 @@ void setup() {
 
 float capacity(int distancia){
   // Convertir distancia a altura del líquido (en cm)
-  float altura_liquido = altura_total - distancia / 10.0; // convertir de mm a cm
+  float altura_liquido = altura_total - (distancia / 10.0 - ajuste); // convertir de mm a cm
+  
   Serial.println(altura_liquido);
   
   // Calcular el volumen del líquido en el recipiente (en litros)
@@ -133,19 +155,21 @@ void loop() {
   digitalWrite(ledPin, LOW);
   BLEDevice central = BLE.central();
   int reading = sensor.readRangeContinuousMillimeters();
-  Serial.print("Reading: ");
-  Serial.println(reading);
-  Serial.print("bottleType:");
-  Serial.println(bottleType);
-
-  if (bottleType != LITRE_8){
-    //updateBottleCount(reading);    
-    bottleCount = capacity(reading) * 100;
-  }
-  else {
-    // contar la cantidad de litros remanente
-    //countRemainingBottles(reading);
-    bottleCount = capacity(reading) * 100;
+  if (!sensor.timeoutOccurred()) {
+    Serial.print("Reading: ");
+    Serial.println(reading);
+    Serial.print("bottleType:");
+    Serial.println(bottleType);
+  
+    if (bottleType != LITRE_8){
+      //updateBottleCount(reading);    
+      bottleCount = capacity(reading) * 100;
+    }
+    else {
+      // contar la cantidad de litros remanente
+      //countRemainingBottles(reading);
+      bottleCount = capacity(reading) * 100;
+    }
   }
 
   if (central) {
