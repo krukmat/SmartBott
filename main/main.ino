@@ -26,6 +26,7 @@ boolean counterEnabled = true;
 // bottle definitions
 const float radio = 8; // en cm
 const float altura_total = 32; // en cm
+const float ajuste = 7;
 const float capacidad_total = 7.5; // en litros
 
 // Define the bottle count and previous measure
@@ -119,7 +120,7 @@ void setup() {
 
 float capacity(int distancia){
   // Convertir distancia a altura del líquido (en cm)
-  float altura_liquido = altura_total - distancia / 10.0; // convertir de mm a cm
+  float altura_liquido = altura_total - (distancia / 10.0 - ajuste); // convertir de mm a cm
   Serial.println(altura_liquido);
   
   // Calcular el volumen del líquido en el recipiente (en litros)
