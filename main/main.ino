@@ -24,7 +24,7 @@ const int THRESHOLD_EMPTY_8 = 320;
 boolean counterEnabled = true;
 
 // bottle definitions
-const float radio = 3; // en cm
+const float radio = 3.5; // en cm
 const float altura_total = 20; // en cm
 const float ajuste = 5; // cm
 const float capacidad_total = 0.75; // en litros
