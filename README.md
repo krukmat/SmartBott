@@ -5,7 +5,6 @@ This project utilizes a Seeed Studio XIAO board based on the 32bit Risc ESP32C c
 ## Prototype
 ![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/1.jpg "First prototype")
 ![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/2.jpg "Sensor")
-![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/3.jpg "Sensor")
 
 ## Mobile app - Android
 ![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-1.png "Home")
@@ -32,32 +31,30 @@ Make sure the required libraries are installed before uploading the code to your
 3. Open the `main.ino` file in the Arduino IDE or your preferred code editor.
 4. Upload the code to the Seeed Studio XIAO board.
 
-## Functionality
+Arduino Code (ESP32-C3)
+The Arduino code reads data from a VL53L0X distance sensor to measure the liquid level in a water bottle. Below is a high-level explanation of the code:
 
-The smart bottle counter utilizes Bluetooth Low Energy (BLE) to transmit the bottle count to a connected device. It uses the VL53L0X sensor to measure the distance to the liquid level in a bottle and determine the bottle's fullness.
+Overview
+The code utilizes the ArduinoBLE library to establish Bluetooth Low Energy (BLE) communication and send water consumption data to mobile devices.
 
-The code sets up a BLE service and characteristic to enable communication with connected devices. It defines different bottle types (1.5 liters and 0.5 liters) and corresponding sensor thresholds for different levels of fullness.
+## Main Components: Arduino
+Initialization: Configures the BLE module and the VL53L0X distance sensor.
+BLE Service and Characteristic: Defines a BLE service for sending consumption data and a characteristic for notifying and writing this data.
+BLE Write Handling: Manages writes of data from the mobile device and updates the bottle counter and bottle type based on the received information.
+Capacity Function: Calculates the volume of liquid in the bottle using the height measured by the distance sensor.
+Main Loop: Continuously reads the distance measured by the sensor, updates the bottle counter, and transmits the data via BLE.
+## React Native Code
+The mobile application developed in React Native is used to visualize and control water consumption measured by the ESP32-C3 device. Below is a high-level explanation of the code:
 
-The main functionality is implemented in the `loop()` function, which performs the following steps:
+### Overview
+The mobile application scans and connects to available BLE devices to receive water consumption data. It allows the user to select a device, view the current water level, and control different display modes.
 
-1. Reads the sensor data to obtain the distance to the liquid level in the bottle.
-2. Updates the bottle count based on the current sensor reading using the `updateBottleCount()` function.
-3. If a device is connected via BLE, transmits the bottle count using the `transmitBottleCount()` function.
-
-The `updateBottleCount()` function determines the current state of the bottle (FULL, HALF, or EMPTY) based on the sensor reading and updates the bottle count accordingly. It keeps track of the previous measure to detect transitions from HALF to EMPTY or FULL to EMPTY and increments the bottle count accordingly.
-
-The `transmitBottleCount()` function sends the current bottle count over BLE to the connected device using the `bottleCharacteristic`.
-
-## Customization
-
-You can customize the behavior of the smart bottle counter by modifying the following parameters:
-
-- `BottleType`: Enumerates the different bottle types (`LITRE_1_5`,`LITRE_0_5`, `LITRE_1`). Adjust these according to your specific bottle sizes.
-- `THRESHOLD_FULL`: Defines the sensor reading threshold for a bottle to be considered full.
-- `THRESHOLD_EMPTY_1_5` and `THRESHOLD_EMPTY_0_5` and `THRESHOLD_EMPTY_1` : Define the sensor reading thresholds for a bottle to be considered empty for each bottle type.
-
-You can adjust these values based on your sensor's calibration and the desired level of accuracy for detecting bottle fullness.
-
+### Main Components
+BLE Device Scanning: Scans nearby BLE devices and displays a list of available devices.
+Connection and Data Reading: Connects to the selected device and reads water consumption data.
+Local Data Storage: Uses AsyncStorage to store consumption data locally on the mobile device.
+Display Mode Selection: Allows the user to select between different data display modes, such as liters, milliliters, etc.
+Visualization Charts: Utilizes the GaugeChart library to graphically display the current water level.
 ## Troubleshooting
 
 If you encounter any issues while running the smart bottle counter, consider the following:
