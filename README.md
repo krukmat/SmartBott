@@ -46,7 +46,6 @@ Once the water volume calculation is complete, the Arduino code utilizes Bluetoo
 
 You can customize the behavior of the smart bottle counter by modifying the following parameters:
 
-// bottle definitions
 `
 const float radio = 3.5; // cms it's the recipient radius
 const float altura_total = 20; // cms it's the total height on the recipient
