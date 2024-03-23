@@ -44,6 +44,7 @@ Once the water volume calculation is complete, the Arduino code utilizes Bluetoo
 
 ## Customization
 
+### Recipient
 You can customize the behavior of the smart bottle counter by modifying the following parameters:
 
 ```
@@ -54,7 +55,12 @@ const float altura_total = 20; // cms it's the total height on the recipient
 const float ajuste = 5; // cms the adjustment needed when the recipient is irregular. 
 
 const float capacidad_total = 0.75; // total capacity in litres
+
 ```
+
+### Python script
+This Python code in python/bluetooth-reader.py establishes a Bluetooth connection with a specified device, subscribes to a specific service, and sends data to Salesforce for further processing. You need to change the TARGET_MAC_ADDRESS and SERVICE_UUID variables to match your specific Bluetooth device's MAC address and service UUID, respectively.
+Also it's needed the Salesforce parameters (username, password, and security_token) that should be based on valid  credentials provided in the salesforce_creds.py file
 
 ## Troubleshooting
 
