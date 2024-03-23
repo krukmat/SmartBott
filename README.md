@@ -48,8 +48,11 @@ You can customize the behavior of the smart bottle counter by modifying the foll
 
 `
 const float radio = 3.5; // cms it's the recipient radius
+
 const float altura_total = 20; // cms it's the total height on the recipient
+
 const float ajuste = 5; // cms the adjustment needed when the recipient is irregular. 
+
 const float capacidad_total = 0.75; // total capacity in litres
 `
 
