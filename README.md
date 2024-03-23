@@ -1,4 +1,4 @@
-# SmartBott
+# SmartTank - Smarter Hydration
 
 This project utilizes a Seeed Studio XIAO board based on the 32bit Risc ESP32C chipset, along with a VL53L0X sensor, to create a smart bottle counter. The code provided in `main.ino` implements the functionality of the smart bottle counter.
 
@@ -32,29 +32,27 @@ Make sure the required libraries are installed before uploading the code to your
 
 ## Functionality
 
-The smart bottle counter utilizes Bluetooth Low Energy (BLE) to transmit the bottle count to a connected device. It uses the VL53L0X sensor to measure the distance to the liquid level in a bottle and determine the bottle's fullness.
+### Calculation of Water Volume
+Measuring Distance: The ToF sensor provides distance measurements in millimeters, stored in the variable reading.
 
-The code sets up a BLE service and characteristic to enable communication with connected devices. It defines different bottle types (1.5 liters and 0.5 liters) and corresponding sensor thresholds for different levels of fullness.
+Calculating Liquid Height: Using the measured distance (reading), the code calculates the height of the liquid in the jug. This calculation involves subtracting the measured distance from the total jug height and applying any necessary adjustments for accuracy.
 
-The main functionality is implemented in the `loop()` function, which performs the following steps:
+Calculating Liquid Volume: With the liquid height determined, the code employs the formula for the volume of a cylinder to calculate the volume of liquid present in the jug. This calculation considers the known radius of the jug's base and the measured height of the liquid.
 
-1. Reads the sensor data to obtain the distance to the liquid level in the bottle.
-2. Updates the bottle count based on the current sensor reading using the `updateBottleCount()` function.
-3. If a device is connected via BLE, transmits the bottle count using the `transmitBottleCount()` function.
-
-The `updateBottleCount()` function determines the current state of the bottle (FULL, HALF, or EMPTY) based on the sensor reading and updates the bottle count accordingly. It keeps track of the previous measure to detect transitions from HALF to EMPTY or FULL to EMPTY and increments the bottle count accordingly.
-
-The `transmitBottleCount()` function sends the current bottle count over BLE to the connected device using the `bottleCharacteristic`.
+### Bluetooth Communication
+Once the water volume calculation is complete, the Arduino code utilizes Bluetooth Low Energy (BLE) communication to transmit this information to external devices. This is achieved through the ArduinoBLE library, which allows the Arduino device to advertise services and characteristics for data transmission
 
 ## Customization
 
 You can customize the behavior of the smart bottle counter by modifying the following parameters:
 
-- `BottleType`: Enumerates the different bottle types (`LITRE_1_5`,`LITRE_0_5`, `LITRE_1`). Adjust these according to your specific bottle sizes.
-- `THRESHOLD_FULL`: Defines the sensor reading threshold for a bottle to be considered full.
-- `THRESHOLD_EMPTY_1_5` and `THRESHOLD_EMPTY_0_5` and `THRESHOLD_EMPTY_1` : Define the sensor reading thresholds for a bottle to be considered empty for each bottle type.
-
-You can adjust these values based on your sensor's calibration and the desired level of accuracy for detecting bottle fullness.
+// bottle definitions
+`
+const float radio = 3.5; // cms it's the recipient radius
+const float altura_total = 20; // cms it's the total height on the recipient
+const float ajuste = 5; // cms the adjustment needed when the recipient is irregular. 
+const float capacidad_total = 0.75; // total capacity in litres
+`
 
 ## Troubleshooting
 
