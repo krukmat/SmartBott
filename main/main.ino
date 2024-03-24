@@ -13,10 +13,9 @@ enum BottleType { LITRE_1_5, LITRE_0_5, LITRE_1, LITRE_8};
 BottleType bottleType = LITRE_8;
 
 // bottle definitions
-const float radio = 3.5; // en cm
-const float altura_total = 20; // en cm
-const float ajuste = 5; // cm
-const float capacidad_total = 0.75; // en litros
+const float radio = 7.5; // en cm
+const float altura_total = 40; // en cm
+const float capacidad_total = 7.5; // en litros
 
 // Define the bottle count and previous measure
 int bottleCount = 0;
