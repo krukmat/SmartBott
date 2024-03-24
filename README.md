@@ -8,7 +8,6 @@ This project utilizes a Seeed Studio XIAO board based on the 32bit Risc ESP32C c
 
 ## Mobile app - Android
 ![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-1.png "Home")
-![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-2.png "Home")
 
 ## Mobile app - IOS
 
