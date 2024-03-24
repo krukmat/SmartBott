@@ -7,7 +7,7 @@ This project utilizes a Seeed Studio XIAO board based on the 32bit Risc ESP32C c
 ![Alt text](https://github.com/krukmat/SmartBott/blob/bd77f27ea00c005a26e891ed0e93af6fd5c0e222/images/2.jpg "Sensor")
 
 ## Mobile app - Android
-![Alt text](https://github.com/krukmat/SmartBott/blob/59062e45b8b63f9ca055d93f5d3271169c726023/images/android-1.png "Home")
+![Alt text](https://github.com/krukmat/SmartBott/blob/05cd54c6b42411e08bc30658780279a2d8c8b747/images/android-1.png "Home")
 
 ## Mobile app - IOS
 
