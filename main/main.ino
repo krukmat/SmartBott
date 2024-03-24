@@ -15,8 +15,8 @@ BottleType bottleType = LITRE_8;
 
 // bottle definitions
 const float radio = 3.5; // en cm
-const float altura_total = 20; // en cm
-const float ajuste = 5; // cm
+const float altura_total = 23; // en cm
+const float ajuste = 1; // cm
 const float capacidad_total = 0.75; // en litros
 
 // Define the bottle count and previous measure
